@@ -2,7 +2,7 @@ import express from 'express';
 import { chatWithAi } from '../controllers';
 import { generateQrCode, getQrCode } from '../controllers';
 import { linePayRequest, linePayConfirm, linePayCheckPaymentStatus, linePayPaymentDetails } from '../controllers';
-import { newebPayGetHash, newebPayPayment } from '../controllers';
+import {newebPayGetHash, newebPayPayment, EcPayPayment} from '../controllers';
 const router = express.Router();
 
 // index route
@@ -19,6 +19,7 @@ router.route('/payments/line-pay/check-payment').post(linePayCheckPaymentStatus)
 router.route('/payments/line-pay/payment-details').post(linePayPaymentDetails);
 router.route('/payments/neweb-pay/get-hash').post(newebPayGetHash);
 router.route('/payments/neweb-pay/payment').post(newebPayPayment);
+router.route('/payments/ec-pay/payment').post(EcPayPayment);
 
 // QR Code Routes
 router.route('/qr-codes')

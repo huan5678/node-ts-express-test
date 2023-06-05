@@ -72,6 +72,7 @@
         </div>
         <button type="button" id="getHash" class="btn btn-default">Get Hash</button>
         <button id="submit" type="submit" class="btn btn-default">Pay</button>
+        <button id="ecpay" type="reset" class="btn btn-default">綠界</button>
       </form>
       <br />
       <pre class="text-left jumbotron" id="curl"></pre>
@@ -174,6 +175,20 @@
 
       sendButton.addEventListener('click', async () => {
         const result = await checkout('payments/neweb-pay/payment');
+        const resultData = await result.text(); // 獲取回應的 HTML 內容
+        console.log(resultData);
+
+        // 建立一個新的 div 元素來展示 HTML 內容
+        const div = document.createElement('div');
+        div.innerHTML = resultData;
+
+        // 將新的 div 元素添加到網頁中
+        document.body.appendChild(div);
+      });
+
+      const ecpayBtn = document.getElementById('ecpay');
+      ecpayBtn.addEventListener('click', async () => {
+        const result = await checkout('payments/ec-pay/payment');
         const resultData = await result.text(); // 獲取回應的 HTML 內容
         console.log(resultData);
 
