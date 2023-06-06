@@ -55,6 +55,8 @@ const config = {
   HashKey: process.env.ECPAY_HASH_KEY || "",
   HashIV: process.env.ECPAY_HASH_IV || "",
   ReturnURL: `${host}/payments/ec-pay/return`,
+  ChoosePayment: "ALL", // 選擇預設付款方式: Credit | WebATM | ATM | CVS | BARCODE | ALL
+  IgnorePayment: "", // 選擇預設不付款方式: Credit | WebATM | ATM | CVS | BARCODE | ALL
 };
 
 const merchant = new Merchant("Test", config);
@@ -259,11 +261,11 @@ const baseParams: BasePaymentParams = {
 
 
     const params: CreditOneTimePaymentParams = {
-      // 皆為選填
+// 皆為選填
 
       BindingCard: 1, // 記憶信用卡: 1 (記) | 0 (不記)
       MerchantMemberID: '2000132u001', // 記憶卡片需加註識別碼: MerchantId+廠商會員編號
-      Language: "CHI", // 語系: undefined(繁中) | 'ENG' | 'KOR' | 'JPN' | 'CHI'
+      Language: '', // 語系: undefined(繁中) | 'ENG' | 'KOR' | 'JPN' | 'CHI'
       Redeem: "Y", // 紅利折抵: undefined(不用) | 'Y' (使用)
       UnionPay: 2, // [需申請] 銀聯卡: 0 (可用, default) | 1 (導至銀聯網) | 2 (不可用)
     };
@@ -280,7 +282,8 @@ console.log(htmlRedirectPostForm);
 
 
 
-    res.send(htmlRedirectPostForm);
+res.render("checkout", { title: "checkout", html: htmlRedirectPostForm });
+
   }
 );
 
