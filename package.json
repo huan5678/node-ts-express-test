@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "start": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "start": "ts-node-dev --project tsconfig.server.json --exit-child --respawn --files src/app.ts",
     "server:build": "tsc --project tsconfig.server.json",
     "server:start": "node dist-server/server.js"
   },
@@ -17,6 +17,8 @@
     "@types/express": "^4.17.17",
     "@types/node": "^20.2.5",
     "@types/qrcode": "^1.5.0",
+    "@types/react": "^18.2.8",
+    "@types/react-dom": "^18.2.4",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
@@ -34,6 +36,8 @@
     "node-ecpay-aio": "^0.2.3",
     "openai": "^3.2.1",
     "qrcode": "^1.5.3",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "uuid": "^9.0.0"
   }
 }

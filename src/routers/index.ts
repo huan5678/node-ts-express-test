@@ -1,34 +1,57 @@
-import express from 'express';
-import { chatWithAi } from '../controllers';
-import { generateQrCode, getQrCode } from '../controllers';
-import { linePayRequest, linePayConfirm, linePayCheckPaymentStatus, linePayPaymentDetails } from '../controllers';
-import {newebPayGetHash, newebPayPayment, EcPayPayment} from '../controllers';
-const router = express.Router();
+import { Router } from "express";
 
-// index route
-router.get('/', (req, res) => {
+
+import { chatWithAi } from "../controllers";
+import { generateQrCode, getQrCode } from "../controllers";
+import {
+  linePayRequest,
+  linePayConfirm,
+  linePayCheckPaymentStatus,
+  linePayPaymentDetails,
+} from "../controllers";
+
+import {
+  newebPayGetHash,
+  newebPayPayment,
+  EcPayPayment,
+  EcPayPaymentReturn,
+} from "../controllers";
+
+const ApiRouter = Router();
+
+
+ApiRouter.get(('/'),(req, res) => {
   const data = '';
 
   res.render('index', {data});
+})
+// Payments Routes
+ApiRouter.post('/payments/line-pay/request', linePayRequest);
+ApiRouter.get('/payments/line-pay/confirm', linePayConfirm);
+ApiRouter.post('/payments/line-pay/check-payment', linePayCheckPaymentStatus);
+ApiRouter.post('/payments/line-pay/payment-details', linePayPaymentDetails);
+ApiRouter.post('/payments/neweb-pay/get-hash', newebPayGetHash);
+ApiRouter.post('/payments/neweb-pay/payment', newebPayPayment);
+ApiRouter.post('/payments/ec-pay/payment', EcPayPayment);
+ApiRouter.post("/payments/ec-pay/return", EcPayPaymentReturn);
+
+ApiRouter.post("/payments/checkout", (req, res) => {
+  console.log(req.body);
+  const html = "";
+  res.render("checkout", { html });
 });
 
-// Payments Routes
-router.route('/payments/line-pay/request').post(linePayRequest);
-router.route('/payments/line-pay/confirm').get(linePayConfirm);
-router.route('/payments/line-pay/check-payment').post(linePayCheckPaymentStatus);
-router.route('/payments/line-pay/payment-details').post(linePayPaymentDetails);
-router.route('/payments/neweb-pay/get-hash').post(newebPayGetHash);
-router.route('/payments/neweb-pay/payment').post(newebPayPayment);
-router.route('/payments/ec-pay/payment').post(EcPayPayment);
 
 // QR Code Routes
-router.route('/qr-codes')
-  .post(generateQrCode);
+ApiRouter.post("/qr-codes", generateQrCode);
 
-router.route('/qr-codes/:id')
-  .get(getQrCode);
+ApiRouter.get("/qr-codes/:id", getQrCode);
+
+
 
 // AI Chatbot Routes
-router.route('/chatbot').post(chatWithAi);
+ApiRouter.post("/chatbot", chatWithAi);
 
-export default router;
+export default ApiRouter;
+
+
