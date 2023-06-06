@@ -56,7 +56,6 @@ const config = {
   HashIV: process.env.ECPAY_HASH_IV || "",
   ReturnURL: `${host}/payments/ec-pay/return`,
   ChoosePayment: "ALL", // 選擇預設付款方式: Credit | WebATM | ATM | CVS | BARCODE | ALL
-  IgnorePayment: "", // 選擇預設不付款方式: Credit | WebATM | ATM | CVS | BARCODE | ALL
 };
 
 const merchant = new Merchant("Test", config);

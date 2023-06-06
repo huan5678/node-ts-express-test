@@ -11,21 +11,21 @@
       <h1>BackEnd Index GET</h1>
       <div
         id="app"
-        class="flex flex-col p-5 gap-4 mx-auto"
+        class="flex flex-col gap-4 p-5 mx-auto"
       >
       port: <%= data %>
       <div class="flex items-center gap-4">
-        <a href="/payments/ec-pay/payment" id="ec-pay-get" class="no-underline font-sans ring-2 ring-black bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">EC-PAY-PAYMENT GET Button</a>
-        <button id="ec-pay-post" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">EC-PAY-PAYMENT POST Button</button>
+        <a href="/payments/ec-pay/payment" id="ec-pay-get" class="px-4 py-2 font-sans font-bold text-white no-underline bg-blue-500 rounded ring-2 ring-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">EC-PAY-PAYMENT GET Button</a>
+        <button id="ec-pay-post" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">EC-PAY-PAYMENT POST Button</button>
       </div>
     </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
     <script>
       const ecPayPost = document.getElementById('ec-pay-post');
-      ecPayGet.addEventListener('click', () => {
+      ecPayPost.addEventListener('click', () => {
         fetch('payments/ec-pay/payment', {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           }
