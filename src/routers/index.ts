@@ -15,16 +15,16 @@ import {
   newebPayPayment,
   EcPayPayment,
   EcPayPaymentReturn,
-} from "../controllers";
+  EcPayPaymentCallback,
+} from '../controllers';
 
 const ApiRouter = Router();
 
-
-ApiRouter.get(('/'),(req, res) => {
+ApiRouter.get('/', (req, res) => {
   const data = '';
 
   res.render('index', {data});
-})
+});
 // Payments Routes
 ApiRouter.post('/payments/line-pay/request', linePayRequest);
 ApiRouter.get('/payments/line-pay/confirm', linePayConfirm);
@@ -32,11 +32,10 @@ ApiRouter.post('/payments/line-pay/check-payment', linePayCheckPaymentStatus);
 ApiRouter.post('/payments/line-pay/payment-details', linePayPaymentDetails);
 ApiRouter.post('/payments/neweb-pay/get-hash', newebPayGetHash);
 ApiRouter.post('/payments/neweb-pay/payment', newebPayPayment);
-ApiRouter.route("/payments/ec-pay/payment")
-  .post(EcPayPayment)
-  .get(EcPayPayment);
+ApiRouter.route('/payments/ec-pay/payment').post(EcPayPayment).get(EcPayPayment);
 
-ApiRouter.post("/payments/ec-pay/return", EcPayPaymentReturn);
+ApiRouter.post('/payments/ec-pay/return', EcPayPaymentReturn);
+ApiRouter.post('/payments/ec-pay/callback', EcPayPaymentCallback);
 
 ApiRouter.post("/payments/checkout", (req, res) => {
   console.log(req.body);
