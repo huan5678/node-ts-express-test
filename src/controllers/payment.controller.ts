@@ -101,6 +101,7 @@ const EcPayConfig = {
   HashIV: process.env.ECPAY_HASH_IV || '',
   ReturnURL: `${host}/payments/ec-pay/return`,
   CallbackURL: `${host}/payments/ec-pay/callback`,
+  OrderResultURL: `${host}/payments/ec-pay/result`,
   // ReturnURL: undefined,      // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的 hook
   // ClientBackURL: undefined,  // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
   // OrderResultURL: undefined, // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
@@ -320,6 +321,12 @@ export const EcPayPaymentReturn = asyncHandler(
 export const EcPayPaymentCallback = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     console.log('callback req.body:', req.body);
-    res.render('callback');
+    res.render('callback', {title: '綠界付款完成', result: JSON.stringify(req.body, null, 2)});
+  }
+);
+
+export const EcPayPaymentOrderResult = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    console.log('order result req.body:', req.body);
   }
 );

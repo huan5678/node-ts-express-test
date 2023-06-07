@@ -1,14 +1,13 @@
-import { Router } from "express";
+import {Router} from 'express';
 
-
-import { chatWithAi } from "../controllers";
-import { generateQrCode, getQrCode } from "../controllers";
+import {chatWithAi} from '../controllers';
+import {generateQrCode, getQrCode} from '../controllers';
 import {
   linePayRequest,
   linePayConfirm,
   linePayCheckPaymentStatus,
   linePayPaymentDetails,
-} from "../controllers";
+} from '../controllers';
 
 import {
   newebPayGetHash,
@@ -16,6 +15,7 @@ import {
   EcPayPayment,
   EcPayPaymentReturn,
   EcPayPaymentCallback,
+  EcPayPaymentOrderResult,
 } from '../controllers';
 
 const ApiRouter = Router();
@@ -36,24 +36,20 @@ ApiRouter.route('/payments/ec-pay/payment').post(EcPayPayment).get(EcPayPayment)
 
 ApiRouter.post('/payments/ec-pay/return', EcPayPaymentReturn);
 ApiRouter.post('/payments/ec-pay/callback', EcPayPaymentCallback);
+ApiRouter.post('/payments/ec-pay/result', EcPayPaymentOrderResult);
 
-ApiRouter.post("/payments/checkout", (req, res) => {
+ApiRouter.post('/payments/checkout', (req, res) => {
   console.log(req.body);
-  const html = "";
-  res.render("checkout", { html });
+  const html = '';
+  res.render('checkout', {html});
 });
 
-
 // QR Code Routes
-ApiRouter.post("/qr-codes", generateQrCode);
+ApiRouter.post('/qr-codes', generateQrCode);
 
-ApiRouter.get("/qr-codes/:id", getQrCode);
-
-
+ApiRouter.get('/qr-codes/:id', getQrCode);
 
 // AI Chatbot Routes
-ApiRouter.post("/chatbot", chatWithAi);
+ApiRouter.post('/chatbot', chatWithAi);
 
 export default ApiRouter;
-
-
