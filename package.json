@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "start": "ts-node-dev --project tsconfig.server.json --exit-child --respawn --files src/app.ts",
-    "server:build": "tsc --project tsconfig.server.json --files src/app.ts",
-    "server:start": "node dist-server/server.js"
+    "build": "tsc --project tsconfig.server.json",
+    "start:dev": "ts-node-dev --project tsconfig.server.json --exit-child --watch --files src/app.ts",
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
