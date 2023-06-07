@@ -11,7 +11,7 @@ interface QRCodeData {
   endedAt: string;
 }
 
-const qrCodes: QRCodeData[] = []; //模擬資料庫環境
+const qrCodes: QRCodeData[] = []; // 模擬資料庫環境
 
 export const generateQrCode = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   // Retrieve data from request body to generate QR code

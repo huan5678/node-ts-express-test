@@ -127,7 +127,7 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   const amount = order?.orderMeals.reduce((acc, meal) => acc + meal.price, 0) || 0;
 
   const linePayOrder = {
-    amount: amount,
+    amount,
     currency: 'TWD',
     orderId,
     packages: order?.orderMeals.map((meal) => ({
