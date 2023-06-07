@@ -35,7 +35,7 @@ ApiRouter.post('/payments/neweb-pay/payment', newebPayPayment);
 ApiRouter.route('/payments/ec-pay/payment').post(EcPayPayment).get(EcPayPayment);
 
 ApiRouter.post('/payments/ec-pay/return', EcPayPaymentReturn);
-ApiRouter.post('/payments/ec-pay/callback', EcPayPaymentCallback);
+ApiRouter.get('/payments/ec-pay/callback', EcPayPaymentCallback);
 ApiRouter.post('/payments/ec-pay/result', EcPayPaymentOrderResult);
 
 ApiRouter.post('/payments/checkout', (req, res) => {
