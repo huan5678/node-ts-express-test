@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = import.meta.env.VITE_API_HOST;
 
 interface LinePayRequestResponse {
   returnCode: string;
@@ -40,6 +40,8 @@ export const App = () => {
 
   const [linePaymentUrlWeb, setLinePaymentUrlWeb] = React.useState('');
   const [linePaymentUrlApp, setLinePaymentUrlApp] = React.useState('');
+
+  const [orderId, setOrderId] = React.useState('550e8400-e29b-41d4-a716-446655440000');
 
   const [resultContent, setResultContent] = React.useState('');
 
@@ -82,10 +84,8 @@ export const App = () => {
     setResultContent(resultData);
   };
 
-  const handleEcPay = async () => {
-    const response = await axios.post(`${baseUrl}/payments/ec-pay/payment`);
-    console.log(response);
-    setResultContent(response.data);
+  const handleChangeOrderId = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOrderId(event.target.value);
   };
 
   return (
@@ -210,9 +210,24 @@ export const App = () => {
             <button type="button" className="btn btn-light" onClick={handleNewebPay}>
               藍新
             </button>
-            <button type="button" className="btn btn-light" onClick={handleEcPay}>
-              綠界
-            </button>
+            <div className="flex-auto">
+              <label htmlFor="orderId">訂單編號</label>
+              <div className="d-flex items-center gap-2">
+                <input
+                  type="text"
+                  className="form-control"
+                  value={orderId}
+                  onChange={handleChangeOrderId}
+                />
+                <a
+                  className="btn btn-light w-1/4"
+                  target="_blank"
+                  href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
+                >
+                  綠界
+                </a>
+              </div>
+            </div>
           </div>
         </form>
       </section>
