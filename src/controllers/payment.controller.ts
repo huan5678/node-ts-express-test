@@ -102,6 +102,7 @@ const EcPayConfig = {
   ReturnURL: `${host}/payments/ec-pay/return`,
   CallbackURL: `${host}/payments/ec-pay/callback`,
   OrderResultURL: `${host}/payments/ec-pay/result`,
+  ClientBackURL: `http://172.20.48.1:5173/`,
   // ReturnURL: undefined,      // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的 hook
   // ClientBackURL: undefined,  // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
   // OrderResultURL: undefined, // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址

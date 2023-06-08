@@ -47,9 +47,7 @@ export const App = () => {
 
   const handleLinePayRequest = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/payments/line-pay/request`, {
-        //body: JSON.stringify({}) // 傳遞所需的資料，如有需要
-      });
+      const response = await axios.get(`${baseUrl}/payments/line-pay/request/${orderId}`);
 
       if (response.data.ok) {
         const {result} = await response.data;
@@ -100,7 +98,7 @@ export const App = () => {
         />
         <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
       </header>
-      <section className="container">
+      <section className="container py-4">
         <div id="app" className="flex flex-col justify-center p-5 gap-4 mx-auto">
           <button
             type="button"
