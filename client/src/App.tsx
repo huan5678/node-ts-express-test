@@ -47,7 +47,9 @@ export const App = () => {
 
   const handleLinePayRequest = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/payments/line-pay/request/${orderId}`);
+      const response = await axios.post(`${baseUrl}/payments/line-pay/request`, {
+        orderId,
+      });
 
       if (response.data.ok) {
         const {result} = await response.data;

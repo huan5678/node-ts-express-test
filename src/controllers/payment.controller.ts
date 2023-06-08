@@ -8,7 +8,8 @@ import {ALLPaymentParams, BasePaymentParams} from 'node-ecpay-aio/dist/types';
 import crypto from 'crypto';
 import axios from 'axios';
 
-const host = process.env.HOST || 'http://localhost:3000';
+// const host = process.env.HOST || 'http://localhost:3000';
+const host = 'http://localhost:3000';
 
 const orders = [
   {
@@ -109,15 +110,13 @@ const EcPayMerchant = new Merchant('Test', EcPayConfig);
 
 export const linePayRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const confirmUrl = `${
-    process.env.NODE_ENV === 'dev'
-      ? 'https://127.0.0.1:3000'
-      : 'https://node-typescript-linepay-test.onrender.com'
-  }/line-pay/confirm`;
-  const cancelUrl = `${host}/line-pay/cancel`;
+    process.env.NODE_ENV === 'dev' ? 'https://127.0.0.1:3000' : host
+  }/payments/line-pay/confirm`;
+  const cancelUrl = `${host}/payments/line-pay/cancel`;
 
-  const {id} = req.params;
+  const {orderId} = req.body;
 
-  const order = orders.find((order) => order.id === id);
+  const order = orders.find((order) => order.id === orderId);
   if (!order) {
     res.status(404);
     res.json({error: 'Order not found'});
@@ -128,7 +127,7 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   const linePayOrder = {
     amount,
     currency: 'TWD',
-    orderId: id,
+    orderId,
     packages: order?.orderMeals.map((meal) => ({
       id: meal.mealId,
       amount: meal.amount,
@@ -142,19 +141,22 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
       ],
     })),
   };
-  const response = await linePay.request.send({
-    body: {
-      ...linePayOrder,
-      redirectUrls: {
-        confirmUrl,
-        cancelUrl,
-      },
+
+  const body = {
+    ...linePayOrder,
+    redirectUrls: {
+      confirmUrl,
+      cancelUrl,
     },
-  });
+  };
+
+  const response = await linePay.request.send({body});
+  console.log('linePayRequestResponse:', response);
   res.send(response);
 });
 
 export const linePayConfirm = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  console.log('in linePayConfirm');
   const {transactionId, orderId} = req.body as {
     transactionId: string;
     orderId: string;
