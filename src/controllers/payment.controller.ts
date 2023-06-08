@@ -100,12 +100,9 @@ const EcPayConfig = {
   HashKey: process.env.ECPAY_HASH_KEY || '',
   HashIV: process.env.ECPAY_HASH_IV || '',
   ReturnURL: `${host}/payments/ec-pay/return`,
-  CallbackURL: `${host}/payments/ec-pay/callback`,
-  OrderResultURL: `${host}/payments/ec-pay/result`,
+  // CallbackURL: `${host}/payments/ec-pay/callback`,
+  // OrderResultURL: `${host}/payments/ec-pay/result`,
   ClientBackURL: `http://172.20.48.1:5173/`,
-  // ReturnURL: undefined,      // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的 hook
-  // ClientBackURL: undefined,  // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
-  // OrderResultURL: undefined, // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
 };
 
 const EcPayMerchant = new Merchant('Test', EcPayConfig);
@@ -280,7 +277,7 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
   const order = orders.find((order) => order.id === id);
 
   const TradeDesc = order?.orderMeals.map((meal) => meal.mealDetails.description).join(',') || '';
-  const ItemName = order?.orderMeals.map((meal) => meal.mealDetails.title).join(',') || '';
+  const ItemName = order?.orderMeals.map((meal) => meal.mealDetails.title).join('#') || '';
   const TotalAmount = order?.orderMeals.reduce((acc, meal) => acc + meal.price, 0) || 0;
 
   const baseParams: BasePaymentParams = {
