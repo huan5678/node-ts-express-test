@@ -114,9 +114,9 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   }/payments/line-pay/confirm`;
   const cancelUrl = `${host}/payments/line-pay/cancel`;
 
-  const {orderId} = req.body;
+  const {id} = req.params;
 
-  const order = orders.find((order) => order.id === orderId);
+  const order = orders.find((order) => order.id === id);
   if (!order) {
     res.status(404);
     res.json({error: 'Order not found'});
@@ -127,10 +127,10 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   const linePayOrder = {
     amount,
     currency: 'TWD',
-    orderId,
+    orderId: id,
     packages: order?.orderMeals.map((meal) => ({
       id: meal.mealId,
-      amount: meal.amount,
+      amount: meal.price,
       products: [
         {
           name: meal.mealDetails.title,

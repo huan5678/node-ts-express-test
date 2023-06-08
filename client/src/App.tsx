@@ -38,8 +38,6 @@ export const App = () => {
   const [hash, setHash] = React.useState('');
   const [encrypted, setEncrypted] = React.useState('');
 
-  const [linePaymentUrlWeb, setLinePaymentUrlWeb] = React.useState('');
-  const [linePaymentUrlApp, setLinePaymentUrlApp] = React.useState('');
 
   const [orderId, setOrderId] = React.useState('550e8400-e29b-41d4-a716-446655440000');
 
@@ -47,15 +45,11 @@ export const App = () => {
 
   const handleLinePayRequest = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/payments/line-pay/request`, {
-        orderId,
-      });
-
-      if (response.data.ok) {
-        const {result} = await response.data;
-        const {info} = result.body;
-        setLinePaymentUrlWeb(info.paymentUrl.web);
-        setLinePaymentUrlApp(info.paymentUrl.app);
+      const response = await axios.get(`${baseUrl}/payments/line-pay/request/${orderId}`);
+      const {body} = response.data;
+      if (body.returnCode === '0000') {
+        const {web} = body.info.paymentUrl;
+        window.open(web, '_blank');
       } else {
         console.error('Error:', response.data.statusText);
       }
@@ -110,16 +104,6 @@ export const App = () => {
           >
             LINE PAY REQUEST
           </button>
-          <LinkBtn
-            herf={linePaymentUrlWeb}
-            text="LINE PAY WEB PAYMENT"
-            enable={linePaymentUrlWeb !== ''}
-          />
-          <LinkBtn
-            herf={linePaymentUrlApp}
-            text="LINE PAY APP PAYMENT"
-            enable={linePaymentUrlApp !== ''}
-          />
         </div>
 
         <form
