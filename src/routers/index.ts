@@ -26,13 +26,13 @@ ApiRouter.get('/', (req, res) => {
   res.render('index', {data});
 });
 // Payments Routes
-ApiRouter.post('/payments/line-pay/request', linePayRequest);
+ApiRouter.get('/payments/line-pay/request/:id', linePayRequest);
 ApiRouter.get('/payments/line-pay/confirm', linePayConfirm);
 ApiRouter.post('/payments/line-pay/check-payment', linePayCheckPaymentStatus);
 ApiRouter.post('/payments/line-pay/payment-details', linePayPaymentDetails);
 ApiRouter.post('/payments/neweb-pay/get-hash', newebPayGetHash);
 ApiRouter.post('/payments/neweb-pay/payment', newebPayPayment);
-ApiRouter.route('/payments/ec-pay/request').post(EcPayPayment).get(EcPayPayment);
+ApiRouter.get('/payments/ec-pay/request/:id', EcPayPayment);
 
 ApiRouter.post('/payments/ec-pay/return', EcPayPaymentReturn);
 ApiRouter.get('/payments/ec-pay/callback', EcPayPaymentCallback);

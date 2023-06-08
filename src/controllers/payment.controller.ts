@@ -117,9 +117,9 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   }/line-pay/confirm`;
   const cancelUrl = `${host}/line-pay/cancel`;
 
-  const {orderId} = req.query;
+  const {id} = req.params;
 
-  const order = orders.find((order) => order.id === orderId);
+  const order = orders.find((order) => order.id === id);
   if (!order) {
     res.status(404);
     res.json({error: 'Order not found'});
@@ -130,7 +130,7 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   const linePayOrder = {
     amount,
     currency: 'TWD',
-    orderId,
+    orderId: id,
     packages: order?.orderMeals.map((meal) => ({
       id: meal.mealId,
       amount: meal.amount,
@@ -264,19 +264,19 @@ export const newebPayPayment = asyncHandler(async (req: Request, res: Response):
 
 export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const now = new Date();
-  const formattedDate = `${now.getFullYear()}/${(now.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now
-    .getHours()
-    .toString()
-    .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
-    .getSeconds()
-    .toString()
-    .padStart(2, '0')}`;
+  const formattedDate = now.toLocaleString('zh-TW', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
 
-  const {orderId} = req.query;
+  const {id} = req.params;
 
-  const order = orders.find((order) => order.id === orderId);
+  const order = orders.find((order) => order.id === id);
 
   const TradeDesc = order?.orderMeals.map((meal) => meal.mealDetails.description).join(',') || '';
   const ItemName = order?.orderMeals.map((meal) => meal.mealDetails.title).join(',') || '';
@@ -314,6 +314,7 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
 export const EcPayPaymentReturn = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     console.log('return req.body:', req.body);
+    const {CheckMacValue, TradeNo, MerchantTradeNo, RtnCode, RtnMsg} = req.body;
     res.send('1|OK');
   }
 );
