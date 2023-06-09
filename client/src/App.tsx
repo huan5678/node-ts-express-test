@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import {Link, Outlet, RouteObject, useParams, useRoutes} from 'react-router-dom';
+import {Info, Package} from 'line-pay-merchant/dist/line-pay-api/confirm.js';
+import {Product} from 'line-pay-merchant';
 
 const baseUrl = import.meta.env.VITE_API_HOST;
 
@@ -229,21 +231,75 @@ const HomePage = () => {
   );
 };
 
+interface ConfirmPackage {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  products: Product[];
+}
+
 const ReturnPage = () => {
   const {transactionId, orderId} = useParams<string>();
+
+  const [result, setResult] = React.useState<Info>();
 
   useEffect(() => {
     console.log(transactionId);
     console.log(orderId);
+    function fetchData() {
+      if (transactionId && orderId) {
+        axios
+          .get(
+            `${baseUrl}/payments/line-pay/confirm?transactionId=${transactionId}&orderId=${orderId}`
+          )
+          .then((response) => {
+            const {body} = response.data;
+            if (body.returnCode === '0000') {
+              setResult(body.info);
+            }
+          });
+      }
+    }
+    fetchData();
+
+    return () => {
+      setResult(undefined);
+    };
   }, [transactionId, orderId]);
 
   return (
     <div className="container">
       <h2>付款完成</h2>
 
-      <p>This is a great course. You're gonna love it!</p>
+      <p>訂單編號：{orderId}</p>
+      <h3>交易紀錄</h3>
+      <ul>
+        <li>交易方式：{result?.payInfo[0].method}</li>
+        <li>交易金額：{result?.payInfo[0].amount}</li>
+        {result?.packages.map((packageItem) => {
+          const confirmPackage = packageItem as unknown as ConfirmPackage;
+          return (
+            <li key={confirmPackage.id}>
+              <h4>訂單編號：{confirmPackage.id}</h4>
+              <ul>
+                {confirmPackage.products.map((productItem) => (
+                  <React.Fragment key={productItem.id}>
+                    <li>產品名稱：{productItem.name}</li>
+                    <li>
+                      <img src={productItem.imageUrl} alt={productItem.name} />
+                    </li>
+                    <li>產品價格：{productItem.price}</li>
+                    <li>產品數量：{productItem.quantity}</li>
+                  </React.Fragment>
+                ))}
+              </ul>
+            </li>
+          );
+        })}
+      </ul>
 
-      <Link to="/">See all courses</Link>
+      <Link to="/">back to the Home</Link>
     </div>
   );
 };
