@@ -88,13 +88,7 @@ const HomePage = () => {
     setResultContent(resultData);
   };
 
-  const handleChangeOrderIdInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value) {
-      setOrderId(event.target.value);
-    }
-  };
-
-  const handleChangeOrderIdButton = () => {
+  const handleChangeOrderId = () => {
     axios.post(`${baseUrl}/payments/change-id/`, {
       orderId,
     });
@@ -251,7 +245,7 @@ const HomePage = () => {
                   <button
                     type="button"
                     className="btn btn-secondary w-100"
-                    onClick={handleChangeOrderIdButton}
+                    onClick={handleChangeOrderId}
                   >
                     更改Order ID
                   </button>
