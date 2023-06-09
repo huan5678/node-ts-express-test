@@ -160,6 +160,7 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
 export const handleChangeOrderId = asyncHandler(async (req: Request, res: Response) => {
   const {orderId} = req.body;
   baseOrderId = orderId;
+  console.log('handleChangeOrderId: ', baseOrderId);
 });
 
 export const linePayConfirm = asyncHandler(async (req: Request, res: Response): Promise<void> => {
