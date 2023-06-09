@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import {Link, Outlet, RouteObject, useParams, useRoutes} from 'react-router-dom';
-import {Info, Package} from 'line-pay-merchant/dist/line-pay-api/confirm.js';
+import {Info} from 'line-pay-merchant/dist/line-pay-api/confirm.js';
 import {Product} from 'line-pay-merchant';
 
 const baseUrl = import.meta.env.VITE_API_HOST;
@@ -49,7 +49,7 @@ const HomePage = () => {
   const [hash, setHash] = React.useState('');
   const [encrypted, setEncrypted] = React.useState('');
 
-  const [orderId, setOrderId] = React.useState('550e8400-e29b-41d4-a716-446655440000');
+  const [orderId, setOrderId] = React.useState('');
 
   const [resultContent, setResultContent] = React.useState('');
 
@@ -88,8 +88,21 @@ const HomePage = () => {
     setResultContent(resultData);
   };
 
-  const handleChangeOrderId = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOrderId(event.target.value);
+  const handleChangeOrderIdInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value) {
+      setOrderId(event.target.value);
+    }
+  };
+
+  const handleChangeOrderIdButton = () => {
+    axios.post(`${baseUrl}/payments/change-id/`, {
+      orderId,
+    });
+  };
+
+  const handleGeneratorOrderId = () => {
+    const uuid = crypto.randomUUID();
+    setOrderId(uuid);
   };
 
   return (
@@ -204,6 +217,13 @@ const HomePage = () => {
             <button type="button" className="btn btn-light" onClick={handleNewebPay}>
               藍新
             </button>
+            <a
+              className="btn btn-light"
+              target="_blank"
+              href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
+            >
+              綠界
+            </a>
             <div className="flex-auto">
               <label htmlFor="orderId">訂單編號</label>
               <div className="d-flex items-center gap-2">
@@ -212,15 +232,22 @@ const HomePage = () => {
                   id="orderId"
                   className="form-control"
                   value={orderId}
-                  onChange={handleChangeOrderId}
+                  onChange={handleChangeOrderIdInput}
                 />
-                <a
-                  className="btn btn-light w-1/4"
-                  target="_blank"
-                  href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
+                <button
+                  type="button"
+                  className="btn btn-primary w-1/4"
+                  onClick={handleGeneratorOrderId}
                 >
-                  綠界
-                </a>
+                  生成Order ID
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary w-1/4"
+                  onClick={handleChangeOrderIdButton}
+                >
+                  更改Order ID
+                </button>
               </div>
             </div>
           </div>

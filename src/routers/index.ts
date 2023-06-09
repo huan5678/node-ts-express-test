@@ -1,3 +1,4 @@
+import {handleChangeOrderId} from './../controllers/payment.controller';
 import {Router} from 'express';
 
 import {chatWithAi} from '../controllers';
@@ -26,6 +27,7 @@ ApiRouter.get('/', (req, res) => {
   res.render('index', {data});
 });
 // Payments Routes
+ApiRouter.get('/payments/change-id/', handleChangeOrderId);
 ApiRouter.get('/payments/line-pay/request/:id', linePayRequest);
 ApiRouter.get('/payments/line-pay/confirm', linePayConfirm);
 ApiRouter.post('/payments/line-pay/check-payment', linePayCheckPaymentStatus);

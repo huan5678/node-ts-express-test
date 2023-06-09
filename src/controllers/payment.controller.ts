@@ -11,9 +11,11 @@ import axios from 'axios';
 const frontEndHost = process.env.HOST || 'http://localhost:3000';
 // const host = 'http://localhost:3000';
 
+let baseOrderId = '';
+
 const orders = [
   {
-    id: '550e8400-e29b-41d4-a716-446655440000',
+    id: baseOrderId,
     status: 'PENDING',
     type: 'DineIn',
     createdAt: '2023-06-05T08:15:30Z',
@@ -39,7 +41,7 @@ const orders = [
         },
         amount: 2,
         servedAmount: 0,
-        orderId: '550e8400-e29b-41d4-a716-446655440000',
+        orderId: baseOrderId,
         mealId: '550e8400-e29b-41d4-a716-446655440010',
       },
       {
@@ -60,7 +62,7 @@ const orders = [
         },
         amount: 1,
         servedAmount: 0,
-        orderId: '550e8400-e29b-41d4-a716-446655440000',
+        orderId: baseOrderId,
         mealId: '550e8400-e29b-41d4-a716-446655440011',
       },
     ],
@@ -72,7 +74,7 @@ const orders = [
         status: '已付款',
         createdAt: '2023-06-05T08:20:30Z',
         updatedAt: '2023-06-05T08:20:30Z',
-        orderId: '550e8400-e29b-41d4-a716-446655440000',
+        orderId: baseOrderId,
       },
     ],
   },
@@ -153,6 +155,11 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
   const response = await linePay.request.send({body});
   console.log('linePayRequestResponse:', response);
   res.send(response);
+});
+
+export const handleChangeOrderId = asyncHandler(async (req: Request, res: Response) => {
+  const {orderId} = req.body;
+  baseOrderId = orderId;
 });
 
 export const linePayConfirm = asyncHandler(async (req: Request, res: Response): Promise<void> => {
