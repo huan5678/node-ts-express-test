@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
-import {Link, Outlet, RouteObject, useParams, useRoutes} from 'react-router-dom';
+import {Link, Outlet, RouteObject, useLocation, useRoutes} from 'react-router-dom';
 import {Info} from 'line-pay-merchant/dist/line-pay-api/confirm.js';
 import {Product} from 'line-pay-merchant';
 
@@ -59,7 +59,7 @@ const HomePage = () => {
       const {body} = response.data;
       if (body.returnCode === '0000') {
         const {web} = body.info.paymentUrl;
-        window.open(web, '_blank');
+        window.location.href = web;
       } else {
         console.error('Error:', response.data.statusText);
       }
@@ -103,12 +103,6 @@ const HomePage = () => {
     <>
       <header>
         <title>Demo site</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossOrigin="anonymous"
-        />
         <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
       </header>
       <section className="container py-4">
@@ -121,6 +115,41 @@ const HomePage = () => {
           >
             LINE PAY REQUEST
           </button>
+          <div className="d-flex justify-start items-end gap-4">
+            <div className="flex-auto">
+              <label htmlFor="orderId" className="h3 block h-auto">
+                訂單編號
+              </label>
+              <input type="text" id="orderId" className="form-control" readOnly value={orderId} />
+            </div>
+            <div className="w-1/4">
+              <h3>STEP 1</h3>
+              <button
+                type="button"
+                className="btn btn-primary w-100"
+                onClick={handleGeneratorOrderId}
+              >
+                生成Order ID
+              </button>
+            </div>
+            <div className="w-1/4">
+              <h3>STEP 2</h3>
+              <button
+                type="button"
+                className="btn btn-secondary w-100"
+                onClick={handleChangeOrderId}
+              >
+                更改Order ID
+              </button>
+            </div>
+          </div>
+          <a
+            className="btn bg-[#f0f000]"
+            target="_blank"
+            href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
+          >
+            綠界
+          </a>
         </div>
 
         <form
@@ -211,47 +240,6 @@ const HomePage = () => {
             <button type="button" className="btn btn-light" onClick={handleNewebPay}>
               藍新
             </button>
-            <a
-              className="btn btn-light"
-              target="_blank"
-              href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
-            >
-              綠界
-            </a>
-            <div className="flex-auto">
-              <div className="d-flex justify-start items-center gap-4">
-                <div className="flex-auto">
-                  <label htmlFor="orderId">訂單編號</label>
-                  <input
-                    type="text"
-                    id="orderId"
-                    className="form-control"
-                    readOnly
-                    value={orderId}
-                  />
-                </div>
-                <div className="w-1/4">
-                  <h3>STEP 1</h3>
-                  <button
-                    type="button"
-                    className="btn btn-primary w-100"
-                    onClick={handleGeneratorOrderId}
-                  >
-                    生成Order ID
-                  </button>
-                </div>
-                <div className="w-1/4">
-                  <h3>STEP 2</h3>
-                  <button
-                    type="button"
-                    className="btn btn-secondary w-100"
-                    onClick={handleChangeOrderId}
-                  >
-                    更改Order ID
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </form>
       </section>
@@ -269,28 +257,30 @@ interface ConfirmPackage {
 }
 
 const ReturnPage = () => {
-  const {transactionId, orderId} = useParams<string>();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const transactionId = queryParams.get('transactionId');
+  const orderId = queryParams.get('orderId');
 
   const [result, setResult] = React.useState<Info>();
 
   useEffect(() => {
-    console.log(transactionId);
-    console.log(orderId);
-    function fetchData() {
-      if (transactionId && orderId) {
-        axios
-          .get(
-            `${baseUrl}/payments/line-pay/confirm?transactionId=${transactionId}&orderId=${orderId}`
-          )
-          .then((response) => {
-            const {body} = response.data;
-            if (body.returnCode === '0000') {
-              setResult(body.info);
-            }
-          });
-      }
+    if (transactionId && orderId) {
+      axios
+        .get(
+          `${baseUrl}/payments/line-pay/confirm?transactionId=${transactionId}&orderId=${orderId}`
+        )
+        .then((response) => {
+          const {body} = response.data;
+          if (body.returnCode === '0000') {
+            setResult(body.info);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-    fetchData();
 
     return () => {
       setResult(undefined);

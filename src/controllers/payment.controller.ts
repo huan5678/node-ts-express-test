@@ -112,9 +112,9 @@ const EcPayMerchant = new Merchant('Test', EcPayConfig);
 
 export const linePayRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const confirmUrl = `${
-    process.env.NODE_ENV === 'dev' ? 'https://127.0.0.1:3000' : frontEndHost
-  }/payments/line-pay/confirm`;
-  const cancelUrl = `${frontEndHost}/payments/line-pay/cancel`;
+    process.env.NODE_ENV === 'dev' ? 'http://127.0.0.1:5173/return' : `${frontEndHost}/return`
+  }`;
+  const cancelUrl = `${frontEndHost}/`;
 
   const {id} = req.params;
 
