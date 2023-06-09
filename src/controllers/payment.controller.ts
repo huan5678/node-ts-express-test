@@ -158,6 +158,9 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
 export const linePayConfirm = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   console.log('in linePayConfirm');
   const {transactionId, orderId} = req.params;
+  console.log(req.params);
+  console.log('transactionId:', transactionId);
+  console.log('orderId:', orderId);
   const order = orders.find((order) => order.id === orderId);
   const amount = order?.orderMeals.reduce((acc, meal) => acc + meal.price, 0) || 0;
   const response = await linePay.confirm.send({
