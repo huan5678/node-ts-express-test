@@ -8,7 +8,7 @@ import {ALLPaymentParams, BasePaymentParams} from 'node-ecpay-aio/dist/types';
 import crypto from 'crypto';
 import axios from 'axios';
 
-const host = process.env.HOST || 'http://localhost:3000';
+const frontEndHost = process.env.HOST || 'http://localhost:3000';
 // const host = 'http://localhost:3000';
 
 const orders = [
@@ -110,9 +110,9 @@ const EcPayMerchant = new Merchant('Test', EcPayConfig);
 
 export const linePayRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const confirmUrl = `${
-    process.env.NODE_ENV === 'dev' ? 'https://127.0.0.1:3000' : host
+    process.env.NODE_ENV === 'dev' ? 'https://127.0.0.1:3000' : frontEndHost
   }/payments/line-pay/confirm`;
-  const cancelUrl = `${host}/payments/line-pay/cancel`;
+  const cancelUrl = `${frontEndHost}/payments/line-pay/cancel`;
 
   const {id} = req.params;
 
@@ -157,12 +157,9 @@ export const linePayRequest = asyncHandler(async (req: Request, res: Response): 
 
 export const linePayConfirm = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   console.log('in linePayConfirm');
-  const {transactionId, orderId} = req.body as {
-    transactionId: string;
-    orderId: string;
-  };
+  const {transactionId, orderId} = req.params;
   const order = orders.find((order) => order.id === orderId);
-  const amount = order?.orderMeals.reduce((acc, meal) => acc + meal.price * meal.amount, 0) || 0;
+  const amount = order?.orderMeals.reduce((acc, meal) => acc + meal.price, 0) || 0;
   const response = await linePay.confirm.send({
     transactionId,
     body: {
