@@ -103,7 +103,7 @@ const EcPayConfig = {
   ReturnURL: `${frontEndHost}/payments/ec-pay/return`,
   // CallbackURL: `${host}/payments/ec-pay/callback`,
   // OrderResultURL: `${host}/payments/ec-pay/result`,
-  ClientBackURL: `http://172.20.48.1:5173/`,
+  ClientBackURL: `${frontEndHost}`,
 };
 
 const EcPayMerchant = new Merchant('Test', EcPayConfig);
@@ -208,7 +208,7 @@ export const newebPayGetHash = asyncHandler(async (req: Request, res: Response):
     // RespondType: "JSON", // 回傳格式 非必填 'JSON' | 'String'
     TradeLimit: '900', // 交易限制秒數 非必填 60 - 900 秒
     // ExpireDate: "20200729", // 繳費有效期限 非必填 格式：YYYYMMDD
-    ReturnURL: `${host}/return`, // 支付完成返回商店網址 非必填
+    ReturnURL: `${frontEndHost}/return`, // 支付完成返回商店網址 非必填
     NotifyURL: '', // 支付通知網址 非必填
     CustomerURL: '', // 商店取號網址 非必填
     ClientBackURL: '', // 返回商店網址 非必填
