@@ -1,12 +1,51 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
+import {Link, Outlet, RouteObject, useParams, useRoutes} from 'react-router-dom';
 
 const baseUrl = import.meta.env.VITE_API_HOST;
 
 export const App = () => {
+  const routes: RouteObject[] = [
+    {
+      path: '/',
+      element: <Layout />,
+      children: [
+        {index: true, element: <HomePage />},
+        {
+          path: '/return',
+          element: <ReturnPage />,
+        },
+        {path: '*', element: <HomePage />},
+      ],
+    },
+  ];
+
+  const element = useRoutes(routes);
+  return <>{element}</>;
+};
+
+const Layout = () => (
+  <div>
+    <nav>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/return">checkout</Link>
+        </li>
+      </ul>
+    </nav>
+
+    <hr />
+
+    <Outlet />
+  </div>
+);
+
+const HomePage = () => {
   const [hash, setHash] = React.useState('');
   const [encrypted, setEncrypted] = React.useState('');
-
 
   const [orderId, setOrderId] = React.useState('550e8400-e29b-41d4-a716-446655440000');
 
@@ -135,22 +174,22 @@ export const App = () => {
             <input type="text" className="form-control" id="description" placeholder="描述" />
           </div>
           <div className="form-group">
-            <label htmlFor="description">Hash</label>
+            <label htmlFor="hash">Hash</label>
             <input
               type="text"
               className="form-control"
-              id="Hash"
+              id="hash"
               readOnly
               placeholder="Hash"
               value={hash}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="description">Encrypted</label>
+            <label htmlFor="encrypted">Encrypted</label>
             <input
               type="text"
               className="form-control"
-              id="Encrypted"
+              id="encrypted"
               readOnly
               placeholder="Encrypted"
               value={encrypted}
@@ -168,6 +207,7 @@ export const App = () => {
               <div className="d-flex items-center gap-2">
                 <input
                   type="text"
+                  id="orderId"
                   className="form-control"
                   value={orderId}
                   onChange={handleChangeOrderId}
@@ -186,6 +226,25 @@ export const App = () => {
       </section>
       <div dangerouslySetInnerHTML={{__html: resultContent}} />
     </>
+  );
+};
+
+const ReturnPage = () => {
+  const {transactionId, orderId} = useParams<string>();
+
+  useEffect(() => {
+    console.log(transactionId);
+    console.log(orderId);
+  }, [transactionId, orderId]);
+
+  return (
+    <div className="container">
+      <h2>付款完成</h2>
+
+      <p>This is a great course. You're gonna love it!</p>
+
+      <Link to="/">See all courses</Link>
+    </div>
   );
 };
 
