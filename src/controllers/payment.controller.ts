@@ -100,7 +100,7 @@ const EcPayConfig = {
   MerchantID: process.env.ECPAY_MERCHANT_ID || '',
   HashKey: process.env.ECPAY_HASH_KEY || '',
   HashIV: process.env.ECPAY_HASH_IV || '',
-  ReturnURL: `${host}/payments/ec-pay/return`,
+  ReturnURL: `${frontEndHost}/payments/ec-pay/return`,
   // CallbackURL: `${host}/payments/ec-pay/callback`,
   // OrderResultURL: `${host}/payments/ec-pay/result`,
   ClientBackURL: `http://172.20.48.1:5173/`,
