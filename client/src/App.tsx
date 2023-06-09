@@ -3,37 +3,6 @@ import axios from 'axios';
 
 const baseUrl = import.meta.env.VITE_API_HOST;
 
-interface LinePayRequestResponse {
-  returnCode: string;
-  returnMessage: string;
-  info: {
-    paymentUrl: {
-      web: string;
-      app: string;
-    };
-  };
-}
-interface LinkBtnProps {
-  herf: string;
-  text: string;
-  enable: boolean;
-}
-const LinkBtn = (props: LinkBtnProps) => {
-  return props.enable ? (
-    <a
-      type="button"
-      className="px-4 py-2 text-2xl text-center text-white bg-blue-600 border-0 rounded cursor-pointer hover:bg-blue-700"
-      href={props.herf}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {props.text}
-    </a>
-  ) : (
-    <></>
-  );
-};
-
 export const App = () => {
   const [hash, setHash] = React.useState('');
   const [encrypted, setEncrypted] = React.useState('');
