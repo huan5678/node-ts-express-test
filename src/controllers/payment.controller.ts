@@ -8,8 +8,8 @@ import {ALLPaymentParams, BasePaymentParams} from 'node-ecpay-aio/dist/types';
 import crypto from 'crypto';
 import axios from 'axios';
 
-// const host = process.env.HOST || 'http://localhost:3000';
-const host = 'http://localhost:3000';
+const host = process.env.HOST || 'http://localhost:3000';
+// const host = 'http://localhost:3000';
 
 const orders = [
   {
