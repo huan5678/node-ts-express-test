@@ -161,6 +161,13 @@ export const handleChangeOrderId = asyncHandler(async (req: Request, res: Respon
   const {orderId} = req.body;
   baseOrderId = orderId;
   console.log('handleChangeOrderId: ', baseOrderId);
+  orders[0].id = baseOrderId;
+  orders[0].orderMeals.forEach((meal) => {
+    meal.orderId = baseOrderId;
+  });
+  orders[0].paymentLogs.forEach((payment) => {
+    payment.orderId = baseOrderId;
+  });
 });
 
 export const linePayConfirm = asyncHandler(async (req: Request, res: Response): Promise<void> => {

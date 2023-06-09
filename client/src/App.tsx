@@ -225,29 +225,37 @@ const HomePage = () => {
               綠界
             </a>
             <div className="flex-auto">
-              <label htmlFor="orderId">訂單編號</label>
-              <div className="d-flex items-center gap-2">
-                <input
-                  type="text"
-                  id="orderId"
-                  className="form-control"
-                  value={orderId}
-                  onChange={handleChangeOrderIdInput}
-                />
-                <button
-                  type="button"
-                  className="btn btn-primary w-1/4"
-                  onClick={handleGeneratorOrderId}
-                >
-                  生成Order ID
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-secondary w-1/4"
-                  onClick={handleChangeOrderIdButton}
-                >
-                  更改Order ID
-                </button>
+              <div className="d-flex justify-start items-center gap-4">
+                <div className="flex-auto">
+                  <label htmlFor="orderId">訂單編號</label>
+                  <input
+                    type="text"
+                    id="orderId"
+                    className="form-control"
+                    readOnly
+                    value={orderId}
+                  />
+                </div>
+                <div className="w-1/4">
+                  <h3>STEP 1</h3>
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100"
+                    onClick={handleGeneratorOrderId}
+                  >
+                    生成Order ID
+                  </button>
+                </div>
+                <div className="w-1/4">
+                  <h3>STEP 2</h3>
+                  <button
+                    type="button"
+                    className="btn btn-secondary w-100"
+                    onClick={handleChangeOrderIdButton}
+                  >
+                    更改Order ID
+                  </button>
+                </div>
               </div>
             </div>
           </div>
