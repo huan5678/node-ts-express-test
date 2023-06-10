@@ -27,22 +27,33 @@ export const App = () => {
 };
 
 const Layout = () => (
-  <div>
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/return">checkout</Link>
-        </li>
-      </ul>
-    </nav>
+  <>
+    <header>
+      <title>Demo site</title>
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+        crossOrigin="anonymous"
+      ></link>
+    </header>
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/return">checkout</Link>
+          </li>
+        </ul>
+      </nav>
 
-    <hr />
+      <hr />
 
-    <Outlet />
-  </div>
+      <Outlet />
+    </div>
+  </>
 );
 
 const HomePage = () => {
@@ -101,10 +112,6 @@ const HomePage = () => {
 
   return (
     <>
-      <header>
-        <title>Demo site</title>
-        <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
-      </header>
       <section className="container py-4">
         <div id="app" className="flex flex-col justify-center p-5 gap-4 mx-auto">
           <button
@@ -115,36 +122,34 @@ const HomePage = () => {
           >
             LINE PAY REQUEST
           </button>
-          <div className="d-flex justify-start items-end gap-4">
+          <div className="flex justify-start items-end gap-4">
             <div className="flex-auto">
-              <label htmlFor="orderId" className="h3 block h-auto">
+              <label htmlFor="orderId" className="block h-auto text-xl mb-4">
                 訂單編號
               </label>
-              <input type="text" id="orderId" className="form-control" readOnly value={orderId} />
+              <input
+                type="text"
+                id="orderId"
+                className="form-control w-100"
+                readOnly
+                value={orderId}
+              />
             </div>
             <div className="w-1/4">
               <h3>STEP 1</h3>
-              <button
-                type="button"
-                className="btn btn-primary w-100"
-                onClick={handleGeneratorOrderId}
-              >
+              <button type="button" className="btn btn-primary" onClick={handleGeneratorOrderId}>
                 生成Order ID
               </button>
             </div>
             <div className="w-1/4">
               <h3>STEP 2</h3>
-              <button
-                type="button"
-                className="btn btn-secondary w-100"
-                onClick={handleChangeOrderId}
-              >
+              <button type="button" className="btn btn-secondary" onClick={handleChangeOrderId}>
                 更改Order ID
               </button>
             </div>
           </div>
           <a
-            className="btn bg-[#f0f000]"
+            className="px-4 py-2 text-2xl text-center text-white border-0 rounded cursor-pointer bg-[#1ab092] hover:bg-[#219e85]"
             target="_blank"
             href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
           >

@@ -98,18 +98,6 @@ const linePayConfig = {
 };
 const linePay = createLinePayClient(linePayConfig);
 
-const EcPayConfig = {
-  MerchantID: process.env.ECPAY_MERCHANT_ID || '',
-  HashKey: process.env.ECPAY_HASH_KEY || '',
-  HashIV: process.env.ECPAY_HASH_IV || '',
-  ReturnURL: `${frontEndHost}/payments/ec-pay/return`,
-  // CallbackURL: `${host}/payments/ec-pay/callback`,
-  // OrderResultURL: `${host}/payments/ec-pay/result`,
-  ClientBackURL: `${frontEndHost}`,
-};
-
-const EcPayMerchant = new Merchant('Test', EcPayConfig);
-
 export const linePayRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const confirmUrl = `${
     process.env.NODE_ENV === 'dev' ? 'http://127.0.0.1:5173/return' : `${frontEndHost}/return`
@@ -201,11 +189,13 @@ export const linePayCheckPaymentStatus = asyncHandler(
 
 export const linePayPaymentDetails = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const {transactionId} = req.query;
-
+    const {transactionId, orderId} = req.query;
+    console.log('in linePayPaymentDetails');
+    console.log('transactionId:', transactionId);
     const response = await linePay.paymentDetails.send({
       params: {
-        transactionId,
+        transactionId: [transactionId],
+        orderId: [orderId],
       },
     });
     res.send(response);
@@ -276,6 +266,18 @@ export const newebPayPayment = asyncHandler(async (req: Request, res: Response):
   res.send(response.data);
 });
 
+const EcPayConfig = {
+  MerchantID: process.env.ECPAY_MERCHANT_ID || '',
+  HashKey: process.env.ECPAY_HASH_KEY || '',
+  HashIV: process.env.ECPAY_HASH_IV || '',
+  ReturnURL: `${frontEndHost}/payments/checkout`,
+  // CallbackURL: `${host}/payments/ec-pay/callback`,
+  // OrderResultURL: `${host}/payments/ec-pay/result`,
+  ClientBackURL: `${frontEndHost}/return`,
+};
+
+const EcPayMerchant = new Merchant('Test', EcPayConfig);
+
 export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const now = new Date();
   const formattedDate = now.toLocaleString('zh-TW', {
@@ -319,8 +321,8 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
 
   const payment = EcPayMerchant.createPayment(ALLPayment, baseParams, params as ALLPaymentParams);
   const htmlRedirectPostForm = await payment.checkout(/* 可選填發票 */);
-
-  console.log(payment);
+  console.log('htmlRedirectPostForm:', htmlRedirectPostForm);
+  console.log('ec-pay-payment: ', payment);
 
   res.render('checkout', {title: 'checkout', html: htmlRedirectPostForm});
 });

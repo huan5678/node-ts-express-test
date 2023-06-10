@@ -9,7 +9,7 @@ import presetUno from '@unocss/preset-uno';
 export default defineConfig({
   plugins: [
     UnoCSS({
-      shortcuts: [{logo: 'i-logos-react w-6em h-6em transform transition-800 hover:rotate-180'}],
+      shortcuts: [{}],
       presets: [
         presetUno(),
         presetAttributify(),

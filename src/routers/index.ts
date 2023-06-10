@@ -30,8 +30,8 @@ ApiRouter.get('/', (req, res) => {
 ApiRouter.post('/payments/change-id/', handleChangeOrderId);
 ApiRouter.get('/payments/line-pay/request/:id', linePayRequest);
 ApiRouter.get('/payments/line-pay/confirm', linePayConfirm);
+ApiRouter.get('/payments/line-pay/payment-details', linePayPaymentDetails);
 ApiRouter.post('/payments/line-pay/check-payment', linePayCheckPaymentStatus);
-ApiRouter.post('/payments/line-pay/payment-details', linePayPaymentDetails);
 ApiRouter.post('/payments/neweb-pay/get-hash', newebPayGetHash);
 ApiRouter.post('/payments/neweb-pay/payment', newebPayPayment);
 ApiRouter.get('/payments/ec-pay/request/:id', EcPayPayment);
