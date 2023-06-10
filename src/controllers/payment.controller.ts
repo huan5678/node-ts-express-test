@@ -270,10 +270,10 @@ const EcPayConfig = {
   MerchantID: process.env.ECPAY_MERCHANT_ID || '',
   HashKey: process.env.ECPAY_HASH_KEY || '',
   HashIV: process.env.ECPAY_HASH_IV || '',
-  ReturnURL: `${frontEndHost}/payments/checkout`,
+  ReturnURL: `${frontEndHost}/return`,
   // CallbackURL: `${host}/payments/ec-pay/callback`,
   // OrderResultURL: `${host}/payments/ec-pay/result`,
-  ClientBackURL: `${frontEndHost}/return`,
+  ClientBackURL: `${frontEndHost}`,
 };
 
 const EcPayMerchant = new Merchant('Test', EcPayConfig);
