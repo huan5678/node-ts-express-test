@@ -274,6 +274,14 @@ const EcPayConfig = {
 
 const EcPayMerchant = new Merchant('Test', EcPayConfig);
 
+interface CheckMacValueData {
+  CheckMacValue: string;
+}
+
+const handleCheckMacValue = (data: CheckMacValueData, HashKey: string, HashIV: string) => {
+  return isValidReceivedCheckMacValue(data, HashKey, HashIV);
+};
+
 export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const now = new Date();
   const formattedDate = now.toLocaleString('zh-TW', {
@@ -334,9 +342,13 @@ export const EcPayPaymentReturn = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     console.log('return req.body:', req.body);
     const data = {...req.body};
-    const checkValue = isValidReceivedCheckMacValue(data, EcPayConfig.HashKey, EcPayConfig.HashIV);
-    console.log('isValidReceivedCheckMacValue checkValue:', checkValue);
-    if (!checkValue) {
+    const isValidReceivedCheckMacValue = handleCheckMacValue(
+      data,
+      EcPayConfig.HashKey,
+      EcPayConfig.HashIV
+    );
+    console.log('isValidReceivedCheckMacValue checkValue:', isValidReceivedCheckMacValue);
+    if (!isValidReceivedCheckMacValue) {
       res.send('0|ErrorMessage');
       return;
     }
@@ -355,5 +367,16 @@ export const EcPayPaymentCallback = asyncHandler(
 export const EcPayPaymentOrderResult = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     console.log('order result req.body:', req.body);
+    const data = {...req.body};
+    const isValidReceivedCheckMacValue = handleCheckMacValue(
+      data,
+      EcPayConfig.HashKey,
+      EcPayConfig.HashIV
+    );
+    if (!isValidReceivedCheckMacValue) {
+      res.send('0|ErrorMessage');
+      return;
+    }
+    res.render('callback', {title: '綠界付款完成', result: JSON.stringify(req.body, null, 2)});
   }
 );
