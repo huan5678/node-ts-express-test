@@ -150,7 +150,6 @@ const HomePage = () => {
           </div>
           <a
             className="px-4 py-2 text-2xl text-center text-white border-0 rounded cursor-pointer bg-[#1ab092] hover:bg-[#219e85]"
-            target="_blank"
             href={`${baseUrl}/payments/ec-pay/request/${orderId}`}
           >
             綠界

@@ -34,10 +34,10 @@ ApiRouter.get('/payments/line-pay/payment-details', linePayPaymentDetails);
 ApiRouter.post('/payments/line-pay/check-payment', linePayCheckPaymentStatus);
 ApiRouter.post('/payments/neweb-pay/get-hash', newebPayGetHash);
 ApiRouter.post('/payments/neweb-pay/payment', newebPayPayment);
-ApiRouter.get('/payments/ec-pay/request/:id', EcPayPayment);
 
+ApiRouter.get('/payments/ec-pay/request/:id', EcPayPayment);
 ApiRouter.post('/payments/ec-pay/return', EcPayPaymentReturn);
-ApiRouter.get('/payments/ec-pay/callback', EcPayPaymentCallback);
+ApiRouter.post('/payments/ec-pay/callback', EcPayPaymentCallback);
 ApiRouter.post('/payments/ec-pay/result', EcPayPaymentOrderResult);
 
 ApiRouter.post('/payments/checkout', (req, res) => {

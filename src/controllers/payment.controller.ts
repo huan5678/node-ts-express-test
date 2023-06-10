@@ -271,9 +271,6 @@ const EcPayConfig = {
   HashKey: process.env.ECPAY_HASH_KEY || '',
   HashIV: process.env.ECPAY_HASH_IV || '',
   ReturnURL: `${frontEndHost}/return`,
-  // CallbackURL: `${host}/payments/ec-pay/callback`,
-  // OrderResultURL: `${host}/payments/ec-pay/result`,
-  ClientBackURL: `${frontEndHost}`,
 };
 
 const EcPayMerchant = new Merchant('Test', EcPayConfig);
@@ -304,6 +301,13 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
     TotalAmount,
     TradeDesc,
     ItemName,
+    ReturnURL:
+      process.env.NODE_ENV === 'dev'
+        ? 'http://127.0.0.1:3000/payments/ec-pay/return'
+        : `${frontEndHost}/return`,
+    // OrderResultURL: `http://127.0.0.1:3000/payments/ec-pay/result`,
+    ClientBackURL:
+      process.env.NODE_ENV === 'dev' ? 'http://127.0.0.1:5173/return' : `${frontEndHost}/return`,
     // ReturnURL: undefined,      // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的 hook
     // ClientBackURL: undefined,  // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
     // OrderResultURL: undefined, // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
@@ -314,6 +318,9 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
     // BindingCard: 1, // 記憶信用卡: 1 (記) | 0 (不記)
     // MerchantMemberID: '2000132u001', // 記憶卡片需加註識別碼: MerchantId+廠商會員編號
     // IgnorePayment: ['CVS', 'BARCODE'], // 付款方式: undefined(不忽略) | 'CVS' | 'BARCODE' | ['CVS', 'BARCODE'
+    PeriodReturnURL: undefined, // 定期定額的回傳網址
+    ClientRedirectURL: undefined, // Client 端的轉導網址
+    PaymentInfoURL: undefined, // Server 端的回傳網址
     Language: '', // 語系: undefined(繁中) | 'ENG' | 'KOR' | 'JPN' | 'CHI'
     Redeem: 'Y', // 紅利折抵: undefined(不用) | 'Y' (使用)
     UnionPay: 2, // [需申請] 銀聯卡: 0 (可用, default) | 1 (導至銀聯網) | 2 (不可用)
@@ -321,8 +328,6 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
 
   const payment = EcPayMerchant.createPayment(ALLPayment, baseParams, params as ALLPaymentParams);
   const htmlRedirectPostForm = await payment.checkout(/* 可選填發票 */);
-  console.log('htmlRedirectPostForm:', htmlRedirectPostForm);
-  console.log('ec-pay-payment: ', payment);
 
   res.render('checkout', {title: 'checkout', html: htmlRedirectPostForm});
 });
@@ -330,7 +335,7 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
 export const EcPayPaymentReturn = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     console.log('return req.body:', req.body);
-    const {CheckMacValue, TradeNo, MerchantTradeNo, RtnCode, RtnMsg} = req.body;
+
     res.send('1|OK');
   }
 );
