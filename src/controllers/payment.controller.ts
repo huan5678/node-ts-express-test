@@ -8,8 +8,9 @@ import {ALLPaymentParams, BasePaymentParams} from 'node-ecpay-aio/dist/types';
 import crypto from 'crypto';
 import axios from 'axios';
 
-const frontEndHost = process.env.HOST || 'http://localhost:3000';
+const frontEndHost = process.env.FRONTEND_HOST || 'http://127.0.0.1:5173';
 // const host = 'http://localhost:3000';
+const backEndHost = process.env.BACKEND_HOST || 'http://127.0.0.1:3000';
 
 let baseOrderId = '';
 
@@ -99,9 +100,7 @@ const linePayConfig = {
 const linePay = createLinePayClient(linePayConfig);
 
 export const linePayRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const confirmUrl = `${
-    process.env.NODE_ENV === 'dev' ? 'http://127.0.0.1:5173/return' : `${frontEndHost}/return`
-  }`;
+  const confirmUrl = `${frontEndHost}/return`;
   const cancelUrl = `${frontEndHost}/`;
 
   const {id} = req.params;
@@ -270,7 +269,7 @@ const EcPayConfig = {
   MerchantID: process.env.ECPAY_MERCHANT_ID || '',
   HashKey: process.env.ECPAY_HASH_KEY || '',
   HashIV: process.env.ECPAY_HASH_IV || '',
-  ReturnURL: `${frontEndHost}/return`,
+  ReturnURL: `${backEndHost}/payments/ec-pay/return`,
 };
 
 const EcPayMerchant = new Merchant('Test', EcPayConfig);
@@ -301,13 +300,7 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
     TotalAmount,
     TradeDesc,
     ItemName,
-    ReturnURL:
-      process.env.NODE_ENV === 'dev'
-        ? 'http://127.0.0.1:3000/payments/ec-pay/return'
-        : `${frontEndHost}/return`,
-    // OrderResultURL: `http://127.0.0.1:3000/payments/ec-pay/result`,
-    ClientBackURL:
-      process.env.NODE_ENV === 'dev' ? 'http://127.0.0.1:5173/return' : `${frontEndHost}/return`,
+    ClientBackURL: `${frontEndHost}/return`,
     // ReturnURL: undefined,      // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的 hook
     // ClientBackURL: undefined,  // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
     // OrderResultURL: undefined, // 若在 merchant 設定過, 此處不需再設定, 除非你針對此單要用個別的轉導網址
