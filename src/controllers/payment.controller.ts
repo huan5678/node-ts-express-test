@@ -2,7 +2,7 @@ import {asyncHandler} from './../middlewares/index';
 import {Request, Response} from 'express';
 
 import {createLinePayClient} from 'line-pay-merchant';
-import {ALLPayment, Merchant} from 'node-ecpay-aio';
+import {ALLPayment, Merchant, isValidReceivedCheckMacValue} from 'node-ecpay-aio';
 import {ALLPaymentParams, BasePaymentParams} from 'node-ecpay-aio/dist/types';
 
 import crypto from 'crypto';
@@ -328,7 +328,15 @@ export const EcPayPayment = asyncHandler(async (req: Request, res: Response): Pr
 export const EcPayPaymentReturn = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     console.log('return req.body:', req.body);
-
+    const {checkMacValue} = req.body;
+    const data = {...req.body};
+    const checkValue = isValidReceivedCheckMacValue(data, EcPayConfig.HashKey, EcPayConfig.HashIV);
+    console.log(
+      'checkMacValue:',
+      checkMacValue,
+      'isValidReceivedCheckMacValue checkValue:',
+      checkValue
+    );
     res.send('1|OK');
   }
 );
